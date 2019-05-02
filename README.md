@@ -3,17 +3,17 @@
 This SlackApp allow you to take advantage of [FactorialHR](https://factorialhr.es/) signin.
 
 ## Factorial SlackApp Usage
-1. */factorial-login here_your_password *
+1. **/factorial-login here_your_password**
 First you must login into factorial account through. (It is assumed that you use same email to access slack as for factorial)
-2. */check-in text*
+2. **/check-in text**
 This command will start the shift
-3. */take-brake text*
+3. **/take-brake text**
 This command will pause the shift
-4. */resume-shift text*
+4. **/resume-shift text**
 This command will resume the shift
-5. */check-out text*
+5. **/check-out text**
 This command will stop the shift
-5. */factorial-help*
+5. **/factorial-help**
 This is a reminder of existing commands to use this slackApp
 
 ## Installation
