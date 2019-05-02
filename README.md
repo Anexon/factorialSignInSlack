@@ -63,7 +63,7 @@ cd to the root cloned repository folder and deploy proyect into heroku using the
 `heroku git:remote -a your_heroku_app_name_here`
 
 Add some space in the code and commit to push into Heroku
-````
+```
 git add .
 git commit -am "make it better"
 git push heroku master
