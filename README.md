@@ -23,6 +23,32 @@ Clone this repository:
 Install all dependencies using npm:
 `npm install`
 
+### Create a SlackApp
+Create your first app on slack: [create app](https://api.slack.com/apps?new_app=1)
+
+Navigate to *Oauth & Permissions* section and copy the Oauth Access Token of your app. Paste the token into the *.env* file of the cloned project
+`slack_app_token=paste_your_token_here`
+
+Go back to your SlackApp *Oauth & Permissions* and scroll down to Scopes and add following permissions:
+* Send messages as Factorial CheckIn
+* Send messages as user
+* Add slash commands and add actions to messages (and view related content)
+* Access user’s profile and workspace profile fields
+
+Save changes and navigate to *Slash Commands* section. Now add this commands one by one:
+* /check-in
+* /check-out
+* /take-break
+* /resume-shift
+* /factorial-login
+* /factorial-help
+
+As *Url Request* you may put
+`https://heroku-app-name.herokuapp.com/api/commands`
+Where *heroku-app-name* is the name you will put to your Heroku app in next section, so remember to change it if you use different name.
+
+Now navigate to *Basic Information* section and be sure SlackApp is installed into your workspace
+
 ### Create an Heroku app
 Register on [Heroku](https://signup.heroku.com/) and create you app where you will upload repository you just have cloned. Heroku will build and run the project so you may have an accesible server that will handle all commands triggered from slack channels.
 
@@ -41,11 +67,6 @@ Add some space in the code and commit to push into Heroku
 `git commit -am "make it better"`
 `git push heroku master`
 
-Server is ready to handle slack commands
+Server is ready to handle slack commands. You may go to your slack workspace and type commands!
 
-### Create a SlackApp
-Create your first app on slack: [create app](https://api.slack.com/apps?new_app=1)
-
-Navigate to *Oauth & Permissions* section and copy the Oauth Access Token of your app. Paste the token into the *.env* file of the cloned project
-`.env
-slack_app_token=paste_your_token_here`
+After launching a command go and check into you Factorial account if Signing is beign registered so check that everything is working.
