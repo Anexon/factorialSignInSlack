@@ -25,7 +25,7 @@ router.all("/commands", async (req, res) => {
         switch (req.body.command) {
             case "/factorial-help":
                 outputText = `Esta integración con factorial te permitirá controlar el fichaje horario de tu perfil:\n
-                1. Enlaza tu cuenta de factorial: /login _escribe tu contraseña de factorial_\n
+                1. Enlaza tu cuenta de factorial: /factorial-login _escribe tu contraseña de factorial_\n
                 2. Fichar hora de entrada: /check-in _escribe tus buenos días_\n
                 3. Fichar hora de descanso: /take-brake _avisa a tus compañeros_\n
                 4. Fichar hora de vuelta del descanso: /resume-shift _avisa a tus compañeros_\n
