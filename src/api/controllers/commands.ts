@@ -38,7 +38,13 @@ router.all("/commands", async (req, res) => {
                 const token = await login(userEmail, text);
                 if (token !== undefined) {
                     outputText = "Acceso exitoso";
-                    accesses.push({userEmail, accessToken: token});
+                    let previusAccess = accesses.find( access => access.userEmail == userEmail);
+
+                    if(previusAccess !== undefined){
+                        previusAccess.accessToken = token;
+                    } else {
+                        accesses.push({userEmail, accessToken: token});
+                    }
                 } else {
                     outputText = "Usuario y/o contraseña inválidos";
                 }

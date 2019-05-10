@@ -2,7 +2,7 @@ import slack from "slack";
 
 export const postWelcome =
     (channel: string, text: string) => {
-        return slack.chat.meMessage({token: process.env.slack_app_token, channel, text});
+        return slack.chat.postMessage({token: process.env.slack_app_token, channel, text});
     };
 
 export async function getUserEmail(userIdentifier: string) {
