@@ -38,7 +38,7 @@ router.all("/commands", async (req, res) => {
                 const token = await login(userEmail, text);
                 if (token !== undefined) {
                     outputText = "Acceso exitoso";
-                    let previusAccess = accesses.find( access => access.userEmail == userEmail);
+                    let previusAccess = accesses.find( myAccess => myAccess.userEmail == userEmail);
 
                     if(previusAccess !== undefined){
                         previusAccess.accessToken = token;
