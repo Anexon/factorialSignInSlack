@@ -12,18 +12,18 @@ export async function login(userEmail: string, password: string) {
     const accessToken = await getFactorialSessionToken(userEmail, password);
     return accessToken;
 }
-export function checkIn(userEmail: string, accessToken: string) {
+export function checkIn(userEmail: string, accessToken: string, userTimeZone: number) {
 
     getUserInfo(userEmail, accessToken, (userId: string, accessId: string, employeeId: string,
                                          periodId: string, cookieToken: string) => {
-        initShift(periodId, cookieToken);
+        initShift(periodId, cookieToken, userTimeZone);
     });
 }
-export function checkOut(userEmail: string, accessToken: string) {
+export function checkOut(userEmail: string, accessToken: string, userTimeZone: number) {
 
     getUserInfo(userEmail, accessToken, (userId: string, accessId: string, employeeId: string,
                                          periodId: string, cookieToken: string) => {
-        finishShift(periodId, accessToken);
+        finishShift(periodId, accessToken, userTimeZone);
     });
 }
 
@@ -74,8 +74,9 @@ async function getFactorialSessionToken(userEmail: string, userPassword: string)
     }
 }
 
-async function initShift(periodId: string, cookieToken: string) {
-    const date = new Date();
+async function initShift(periodId: string, cookieToken: string, userTimeZone: number) {
+    const auxDate = new Date();
+    const date = new Date(auxDate.getTime() + userTimeZone * 60 * 1000);
     const currentDay = date.getDate();
     const clockIn = date.toTimeString().split(" ")[0].split(":");
 
@@ -104,8 +105,9 @@ async function initShift(periodId: string, cookieToken: string) {
     }
 }
 
-async function finishShift(periodId: string, cookieToken: string) {
-    const date = new Date();
+async function finishShift(periodId: string, cookieToken: string, userTimeZone: number) {
+    const auxDate = new Date();
+    const date = new Date(auxDate.getTime() + userTimeZone * 60 * 1000);
     const currentDay = date.getDate();
     const clockOut = date.toTimeString().split(" ")[0].split(":");
 

@@ -1,27 +1,32 @@
 import express, { Router } from "express";
 import { checkIn, checkOut, login } from "../services/factorial";
-import { getUserEmail, postWelcome } from "../services/slack";
+import { getUserEmail, getUserTimeZone, postWelcome } from "../services/slack";
 
 const router = Router();
 
-const accesses: Array<{userEmail: string, accessToken: string}> = [];
+const accesses: Array<{userEmail: string, accessToken: string, userTimeZone: number}> = [];
 
 router.all("/commands", async (req, res) => {
     const text: string = req.body.text;
     const channel: string = req.body.channel_id;
     const userId: string = req.body.user_id;
     const userEmail = await getUserEmail(userId);
+    const userTimeZone = await getUserTimeZone(userId);
     const timeString = (new Date()).toTimeString().split(" ")[0];
     const time = `${timeString.split(":")[0]}:${timeString.split(":")[1]}`;
 
     let status = 200;
     let outputText = "";
     let standardCommand = true;
-    let access: {userEmail: string, accessToken: string};
+    let access: {userEmail: string, accessToken: string, userTimeZone: number};
+
+    console.log("Launching command: " + req.body.command);
+    console.log("Current Accesses: ");
+    console.log(accesses);
 
     if ( req.body.command == "/factorial-login" || req.body.command == "/factorial-help" ||
         accesses.some((myAccess) => myAccess.userEmail == userEmail) ) {
-
+ 
         switch (req.body.command) {
             case "/factorial-help":
                 outputText = `Esta integración con factorial te permitirá controlar el fichaje horario de tu perfil:\n
@@ -43,7 +48,7 @@ router.all("/commands", async (req, res) => {
                     if(previusAccess !== undefined){
                         previusAccess.accessToken = token;
                     } else {
-                        accesses.push({userEmail, accessToken: token});
+                        accesses.push({userEmail, accessToken: token, userTimeZone});
                     }
                 } else {
                     outputText = "Usuario y/o contraseña inválidos";
@@ -52,22 +57,22 @@ router.all("/commands", async (req, res) => {
                 break;
             case "/check-in":
                 access = accesses.find((myAccess) => myAccess.userEmail == userEmail);
-                checkIn(access.userEmail, access.accessToken);
+                checkIn(access.userEmail, access.accessToken, access.userTimeZone);
                 outputText = `Hora de entrada: ${time}`;
                 break;
             case "/check-out":
                 access = accesses.find((myAccess) => myAccess.userEmail == userEmail);
-                checkOut(access.userEmail, access.accessToken);
+                checkOut(access.userEmail, access.accessToken, access.userTimeZone);
                 outputText = `Hora de salida: ${time}`;
                 break;
             case "/take-break":
                 access = accesses.find((myAccess) => myAccess.userEmail == userEmail);
-                checkOut(access.userEmail, access.accessToken);
+                checkOut(access.userEmail, access.accessToken, access.userTimeZone);
                 outputText = `Hora de pausa: ${time}`;
                 break;
             case "/resume-shift":
                 access = accesses.find((myAccess) => myAccess.userEmail == userEmail);
-                checkIn(access.userEmail, access.accessToken);
+                checkIn(access.userEmail, access.accessToken, access.userTimeZone);
                 outputText = `Hora de vuelta: ${time}`;
                 break;
         }

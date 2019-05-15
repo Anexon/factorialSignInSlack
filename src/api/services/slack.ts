@@ -16,3 +16,11 @@ export async function getUserEmail(userIdentifier: string) {
     });
     return res.profile.email;
 }
+
+export async function getUserTimeZone(userIdentifier: string) {
+    const params = await slack.users.info({
+        token: process.env.slack_app_token,
+        user: userIdentifier
+    })
+    return params.tz_offset;
+}
