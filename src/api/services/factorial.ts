@@ -75,8 +75,8 @@ async function getFactorialSessionToken(userEmail: string, userPassword: string)
 }
 
 async function initShift(periodId: string, cookieToken: string, userTimeZone: number) {
-    const auxDate = new Date();
-    const date = new Date(auxDate.getTime() + userTimeZone * 60 * 1000);
+    const date = new Date();
+    date.setHours(date.getHours() + userTimeZone / 3600 );
     const currentDay = date.getDate();
     const clockIn = date.toTimeString().split(" ")[0].split(":");
 
@@ -106,8 +106,8 @@ async function initShift(periodId: string, cookieToken: string, userTimeZone: nu
 }
 
 async function finishShift(periodId: string, cookieToken: string, userTimeZone: number) {
-    const auxDate = new Date();
-    const date = new Date(auxDate.getTime() + userTimeZone * 60 * 1000);
+    const date = new Date();
+    date.setHours(date.getHours() + userTimeZone / 3600 );
     const currentDay = date.getDate();
     const clockOut = date.toTimeString().split(" ")[0].split(":");
 

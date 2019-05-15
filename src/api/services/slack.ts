@@ -22,5 +22,5 @@ export async function getUserTimeZone(userIdentifier: string) {
         token: process.env.slack_app_token,
         user: userIdentifier
     })
-    return params.tz_offset;
+    return params.user.tz_offset;
 }

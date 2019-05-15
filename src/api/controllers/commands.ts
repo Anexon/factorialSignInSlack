@@ -12,7 +12,11 @@ router.all("/commands", async (req, res) => {
     const userId: string = req.body.user_id;
     const userEmail = await getUserEmail(userId);
     const userTimeZone = await getUserTimeZone(userId);
-    const timeString = (new Date()).toTimeString().split(" ")[0];
+
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + userTimeZone / 3600 );
+    const timeString = currentDate.toTimeString().split(" ")[0];
+
     const time = `${timeString.split(":")[0]}:${timeString.split(":")[1]}`;
 
     let status = 200;
