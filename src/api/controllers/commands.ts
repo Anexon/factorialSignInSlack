@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import { checkIn, checkOut, login } from "../services/factorial";
-import { getUserEmail, getUserTimeZone, postWelcome } from "../services/slack";
+import { getUserEmail, getUserInfo, postWelcome } from "../services/slack";
 
 const router = Router();
 
@@ -11,7 +11,9 @@ router.all("/commands", async (req, res) => {
     const channel: string = req.body.channel_id;
     const userId: string = req.body.user_id;
     const userEmail = await getUserEmail(userId);
-    const userTimeZone = await getUserTimeZone(userId);
+    const userInfo = await getUserInfo(userId);
+    const userTimeZone = userInfo.userTimeZone;
+    const userDisplayName = userInfo.userDisplayName;
 
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + userTimeZone / 3600 );
@@ -30,7 +32,7 @@ router.all("/commands", async (req, res) => {
 
     if ( req.body.command == "/factorial-login" || req.body.command == "/factorial-help" ||
         accesses.some((myAccess) => myAccess.userEmail == userEmail) ) {
- 
+
         switch (req.body.command) {
             case "/factorial-help":
                 outputText = `Esta integración con factorial te permitirá controlar el fichaje horario de tu perfil:\n
@@ -47,9 +49,9 @@ router.all("/commands", async (req, res) => {
                 const token = await login(userEmail, text);
                 if (token !== undefined) {
                     outputText = "Acceso exitoso";
-                    let previusAccess = accesses.find( myAccess => myAccess.userEmail == userEmail);
+                    const previusAccess = accesses.find( (myAccess) => myAccess.userEmail == userEmail);
 
-                    if(previusAccess !== undefined){
+                    if (previusAccess !== undefined) {
                         previusAccess.accessToken = token;
                     } else {
                         accesses.push({userEmail, accessToken: token, userTimeZone});
@@ -87,7 +89,7 @@ router.all("/commands", async (req, res) => {
     res.status(status).send(outputText);
 
     if (standardCommand) {
-        await postWelcome(channel, text)
+        await postWelcome(channel, text, userDisplayName)
         .catch(() => {
             status = 503;
         });

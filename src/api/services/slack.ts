@@ -1,12 +1,13 @@
 import slack from "slack";
 
 export const postWelcome =
-    (myChannel: string, myText: string) => {
+    (myChannel: string, myText: string, displayName: string) => {
         return slack.chat.postMessage({
-            token: process.env.slack_app_token, 
-            channel: myChannel, 
+            token: process.env.slack_app_token,
+            channel: myChannel,
             text: myText,
-            as_user: true});
+            as_user: false,
+            username: displayName});
     };
 
 export async function getUserEmail(userIdentifier: string) {
@@ -17,10 +18,11 @@ export async function getUserEmail(userIdentifier: string) {
     return res.profile.email;
 }
 
-export async function getUserTimeZone(userIdentifier: string) {
+export async function getUserInfo(userIdentifier: string) {
     const params = await slack.users.info({
         token: process.env.slack_app_token,
         user: userIdentifier
-    })
-    return params.user.tz_offset;
+    });
+
+    return {userTimeZone: params.user.tz_offset, userDisplayName: params.user.profile.display_name};
 }
