@@ -12,8 +12,9 @@ router.all("/commands", async (req, res) => {
     const userId: string = req.body.user_id;
     const userEmail = await getUserEmail(userId);
     const userInfo = await getUserInfo(userId);
-    const userTimeZone = userInfo.userTimeZone;
-    const userDisplayName = userInfo.userDisplayName;
+    const userTimeZone: number = userInfo.userTimeZone;
+    const userDisplayName: string = userInfo.userDisplayName;
+    const userImage: string = userInfo.userImage;
 
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + userTimeZone / 3600 );
@@ -89,7 +90,7 @@ router.all("/commands", async (req, res) => {
     res.status(status).send(outputText);
 
     if (standardCommand) {
-        await postWelcome(channel, text, userDisplayName)
+        await postWelcome(channel, text, userDisplayName, userImage)
         .catch(() => {
             status = 503;
         });
