@@ -24,5 +24,10 @@ export async function getUserInfo(userIdentifier: string) {
         user: userIdentifier
     });
 
-    return {userTimeZone: params.user.tz_offset, userDisplayName: params.user.profile.display_name};
+    console.log(params.user.profile);
+
+    return {
+        userTimeZone: params.user.tz_offset, 
+        userDisplayName: params.user.profile.display_name
+    };
 }
