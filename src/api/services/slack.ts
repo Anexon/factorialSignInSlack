@@ -1,13 +1,14 @@
 import slack from "slack";
 
 export const postWelcome =
-    (myChannel: string, myText: string, displayName: string) => {
+    (myChannel: string, myText: string, displayName: string, userImage: string) => {
         return slack.chat.postMessage({
             token: process.env.slack_app_token,
             channel: myChannel,
             text: myText,
             as_user: false,
-            username: displayName});
+            username: displayName,
+            icon_url: userImage});
     };
 
 export async function getUserEmail(userIdentifier: string) {
@@ -24,10 +25,9 @@ export async function getUserInfo(userIdentifier: string) {
         user: userIdentifier
     });
 
-    console.log(params.user.profile);
-
     return {
-        userTimeZone: params.user.tz_offset, 
-        userDisplayName: params.user.profile.display_name
+        userTimeZone: params.user.tz_offset,
+        userDisplayName: params.user.profile.display_name,
+        userImage: params.user.profile.image_48
     };
 }
